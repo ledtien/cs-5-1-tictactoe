@@ -1,97 +1,51 @@
-import { Button, Container } from "react-bootstrap";
-import { useState } from "react";
 import "./App.css";
+import { Form, Col, InputGroup, Button, FormControl } from "react-bootstrap";
+import Game from "./components/Game.js";
 
-const Square = (props) => {
-  return (
-    <button
-      className="square"
-      onClick={() => props.onSquareClicked(props.index)}
-    >
-      {props.hi}
-    </button>
-  );
-};
-const Board = (props) => {
-  const [xIsNext, setXIsNext] = useState(true);
-
-  const onSquareClicked = (i) => {
-    if (props.squares[i]) {
-      return;
-    }
-    const newSquares = props.squares;
-    newSquares[i] = xIsNext ? "X" : "O";
-    props.setSquares(newSquares);
-    setXIsNext(!xIsNext);
-  };
-
-  const renderSquare = (i) => {
-    return (
-      <Square
-        index={i}
-        hi={props.squares[i]}
-        onSquareClicked={onSquareClicked}
-      />
-    );
-  };
-  const status = xIsNext ? "Next Player: X" : "Next Player: O";
-
-  return (
-    <div>
-      <div className="status">{status}</div>
-      <div className="board-row">
-        {renderSquare(0)}
-        {renderSquare(1)}
-        {renderSquare(2)}
-      </div>
-      <div className="board-row">
-        {renderSquare(3)}
-        {renderSquare(4)}
-        {renderSquare(5)}
-      </div>
-      <div className="board-row">
-        {renderSquare(6)}
-        {renderSquare(7)}
-        {renderSquare(8)}
-      </div>
-    </div>
-  );
-};
-const Game = () => {
-  const [squares, setSquares] = useState(Array(9).fill(null));
-  return (
-    <div>
-      <div>
-        <Board squares={squares} setSquares={setSquares} />
-      </div>
-      <div></div>
-    </div>
-  );
-};
-
-// const calculateWinner = () => {
-//   const lines = [
-//     [0, 1, 2],
-//     [3, 4, 5],
-//     [6, 7, 8],
-//     [0, 3, 6],
-//     [1, 4, 7],
-//     [2, 5, 8],
-//     [0, 4, 8],
-//     [2, 4, 6],
-//   ];
-//   for (let i = 0; i < lines.length; i++) {
-//     const [a, b, c] = lines[i];
-//     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-//       return squares[a];
-//     }
-//   }
-//   return null;
-// };
 function App() {
   return (
-    <div className="App container">
-      <Game />
+    <div>
+      <Form className="SubmitForm">
+        <Form.Row className="align-items-center">
+          <Col xs="auto">
+            <Form.Label htmlFor="inlineFormInput" srOnly>
+              Name
+            </Form.Label>
+            <Form.Control
+              className="mb-2"
+              id="inlineFormInput"
+              placeholder="Jane Doe"
+            />
+          </Col>
+          <Col xs="auto">
+            <Form.Label htmlFor="inlineFormInputGroup" srOnly>
+              Username
+            </Form.Label>
+            <InputGroup className="mb-2">
+              <InputGroup.Prepend>
+                <InputGroup.Text>@</InputGroup.Text>
+              </InputGroup.Prepend>
+              <FormControl id="inlineFormInputGroup" placeholder="Username" />
+            </InputGroup>
+          </Col>
+          <Col xs="auto">
+            <Form.Check
+              type="checkbox"
+              id="autoSizingCheck"
+              className="mb-2"
+              label="Remember me"
+            />
+          </Col>
+          <Col xs="auto">
+            <Button type="submit" className="mb-2">
+              Submit
+            </Button>
+          </Col>
+        </Form.Row>
+      </Form>
+      <div className="App container">
+        <Game />
+      </div>
     </div>
   );
 }

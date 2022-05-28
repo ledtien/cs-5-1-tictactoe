@@ -57,8 +57,8 @@ const Game = () => {
     return (
       <button
         onClick={() => {
-          setXIsNext(true);
           setHistory([{ squares: Array(9).fill(null) }]);
+          setXIsNext(true);
         }}
       >
         Start Game

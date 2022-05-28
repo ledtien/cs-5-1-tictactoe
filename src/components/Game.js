@@ -9,7 +9,6 @@ const calculateWinner = (squares) => {
     [6, 7, 8],
     [0, 3, 6],
     [1, 4, 7],
-
     [2, 5, 8],
     [0, 4, 8],
     [2, 4, 6],
@@ -22,36 +21,67 @@ const calculateWinner = (squares) => {
   }
   return null;
 };
+
 const Game = () => {
-  const [board, setBoard] = useState(Array(9).fill(null));
+  // const [board, setBoard] = useState(Array(9).fill(null));
+  const [history, setHistory] = useState([{ squares: Array(9).fill(null) }]);
   const [xIsNext, setXIsNext] = useState(true);
-  const winner = calculateWinner(board);
+  const [stepNumber, setStepNumber] = useState(0);
+  const newHistory = history.slice(0, stepNumber + 1);
+  const current = newHistory[stepNumber];
+  const winner = calculateWinner(current.squares);
+
+  const jumpTo = (step) => {
+    setStepNumber(step);
+    setXIsNext(step % 2 === 0);
+  };
+  const moves = newHistory.map((step, move) => {
+    const desc = move ? "Go to move #" + move : "Go to game start";
+    return (
+      <li key={move}>
+        <button onClick={() => jumpTo(move)}>{desc}</button>
+      </li>
+    );
+  });
 
   const handleClick = (i) => {
-    const boardCopy = [...board];
+    const boardCopy = current.squares.slice();
     if (winner || boardCopy[i]) return;
     boardCopy[i] = xIsNext ? "X" : "O";
-    setBoard(boardCopy);
+    setHistory(newHistory.concat([{ squares: boardCopy }]));
     setXIsNext(!xIsNext);
+    setStepNumber(newHistory.length);
   };
 
   const renderMoves = () => {
     return (
-      <button onClick={() => setBoard(Array(9).fill(null))}>Start Game</button>
+      <button
+        onClick={() => {
+          setXIsNext(true);
+          setHistory([{ squares: Array(9).fill(null) }]);
+        }}
+      >
+        Start Game
+      </button>
     );
   };
   return (
-    <>
-      <div className="status">
-        <h2>
-          {winner
-            ? "Winner: Player " + winner
-            : "Next Player: " + (xIsNext ? "X" : "O")}
-        </h2>
+    <div className="d-flex">
+      <div>
+        <div className="status">
+          <h2>
+            {winner
+              ? "Winner: Player " + winner
+              : "Next Player: " + (xIsNext ? "X" : "O")}
+          </h2>
+        </div>
+        <Board squares={current.squares} onClick={handleClick} />
+        <div className="button">{renderMoves()}</div>
       </div>
-      <Board squares={board} onClick={handleClick} />
-      <div className="button">{renderMoves()}</div>
-    </>
+      <div className="ml-5 mt-5 display-4">
+        <ol className="h2">{moves}</ol>
+      </div>
+    </div>
   );
 };
 

@@ -56,8 +56,9 @@ const Game = () => {
   const renderMoves = () => {
     return (
       <button
-        onClick={() => {
-          setHistory([{ squares: Array(9).fill(null) }]);
+        onClick={(e) => {
+          e.preventDefault();
+          setStepNumber(0);
           setXIsNext(true);
         }}
       >
